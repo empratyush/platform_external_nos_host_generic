@@ -87,6 +87,34 @@ GEN_SERVICE_SOURCE = GEN_SERVICE + " --nos-client-cpp_out=source:$(genDir) "
 GEN_SERVICE_HEADER = GEN_SERVICE + " --nos-client-cpp_out=header:$(genDir) "
 GEN_SERVICE_MOCK = GEN_SERVICE + " --nos-client-cpp_out=mock:$(genDir) "
 
+cc_library_static {
+    name: "libnos_for_duress",
+    vendor_available: true,
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-zero-length-array",
+    ],
+    export_include_dirs: [
+        "nugget/include",
+        "libnos/include",
+        "libnos_datagram/include",
+        "libnos_transport/include",
+    ],
+    srcs: [
+        "libnos/debug.cpp",
+        "libnos_transport/transport.c",
+        "libnos_transport/crc16.c",
+    ],
+    shared_libs: [
+        "liblog",
+    ],
+    static_libs: [
+        "libbase",
+    ],
+}
+
 // A special target to be statically linkeed into recovery which is a system
 // (not vendor) component.
 cc_library_static {
@@ -136,6 +164,26 @@ cc_library_static {
     ],
     static_libs: [
         "libbase",
+    ],
+}
+
+cc_library_static {
+    name: "libnos_citadel_for_duress",
+    vendor_available: true,
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+    ],
+    srcs: [
+        ":libnos_client",
+        "libnos_datagram/citadel.c",
+    ],
+    shared_libs: [
+        "liblog",
+    ],
+    static_libs: [
+        "libnos_for_duress",
     ],
 }
 
