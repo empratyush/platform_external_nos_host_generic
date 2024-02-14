@@ -178,7 +178,7 @@ cc_library_static {
     ],
     shared_libs: [
         "liblog",
-         "libbase",
+        "libbase",
     ],
     static_libs: [
         "libnos_for_duress",
